@@ -1,0 +1,40 @@
+﻿<div>
+    <h1>All Products List</h1>
+    <ul id="lstProducts"></ul>
+</div>
+
+<div>
+    <h1>Search Products</h1>
+    <label>ID: </label>
+    <input type="text" name="txtID" id="txtID" value="" />
+    <input type="button" name="btnSearch" id="btnSearch" value="Search" />
+    <p id="lblProduct"></p>
+
+    <script type="text/javascript">
+        // DOM Ready Event
+
+        $(function () {
+            $.getJSON("/api/products/", function (data) {
+                $.each(data, function (key, val) {
+                    var str = val.Name + " : " + val.Price + "won";
+                    $('<li/>', { html: str }).appendTo($('#lstProducts'));
+                });
+            });
+
+            $('#btnSearch').click(function () {
+                var txtID = $('#txtID').val();
+                $.getJSON("/api/products/" + txtID, function (data) {
+                    var str = data.Name + " : " + data.Price + "Won";
+                    $('#lblProduct').html(str);
+                })
+                    
+                    .fail(function (xhr, status, error) {
+                       $('#lblProduct').html("Error message: "+error);
+                 });
+
+            });
+        });
+
+
+    </script>
+</div>
